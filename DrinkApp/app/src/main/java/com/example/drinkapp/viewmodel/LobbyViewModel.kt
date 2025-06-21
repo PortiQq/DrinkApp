@@ -1,6 +1,5 @@
 package com.example.drinkapp.viewmodel
 
-import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -8,6 +7,7 @@ import com.example.drinkapp.managers.LobbyManager
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.TimerState
 
 class LobbyViewModel : ViewModel() {
     private val _lobby = MutableLiveData<Lobby>()
@@ -30,7 +30,7 @@ class LobbyViewModel : ViewModel() {
     fun initializeLobby(lobbyId: String) {
         this.lobbyId = lobbyId
         val lobby = LobbyManager.getLobby(lobbyId)
-        _lobby.value = lobby
+        //_lobby.value = lobby
 
         // Set up timer state observer
         lobby?.let {
@@ -101,58 +101,3 @@ class LobbyViewModel : ViewModel() {
         lobbyId?.let { LobbyManager.removeTimerStateCallback(it) }
     }
 }
-
-    /*
-    private fun startTimer(durationSeconds: Int) {
-        countDownTimer?.cancel()
-
-        _lobby.value?.let { currentLobby ->
-            currentLobby.isTimerActive = true
-            currentLobby.remainingTimeSeconds = durationSeconds
-            _lobby.value = currentLobby.copy()
-        }
-
-        countDownTimer = object : CountDownTimer(durationSeconds * 1000L, 1000) {
-            override fun onTick(millisUntilFinished: Long) {
-                val secondsLeft = (millisUntilFinished / 1000).toInt()
-                val progressPercentage = ((durationSeconds - secondsLeft) * 100) / durationSeconds
-
-                _timerState.value = TimerState(secondsLeft, progressPercentage)
-
-                _lobby.value?.let { currentLobby ->
-                    currentLobby.remainingTimeSeconds = secondsLeft
-                    _lobby.value = currentLobby.copy()
-                }
-            }
-
-            override fun onFinish() {
-                _timerState.value = TimerState(0, 100)
-                _lobby.value?.let { currentLobby ->
-                    currentLobby.isTimerActive = false
-                    currentLobby.remainingTimeSeconds = 0
-                    _lobby.value = currentLobby.copy()
-                }
-
-                // Show completion notification
-                showTimerCompleteNotification()
-            }
-        }.start()
-    }
-
-    private fun showTimerCompleteNotification() {
-        // Implement notification or callback to MainActivity
-    }
-
-    fun getRemainingTime(): Int = _lobby.value?.remainingTimeSeconds ?: 0
-    fun getCurrentDrink(): Drink = _lobby.value?.currentDrink ?: Drink.COMMON_DRINKS[0]
-
-    override fun onCleared() {
-        super.onCleared()
-        countDownTimer?.cancel()
-    }
-}
-
-data class TimerState(
-    val remainingSeconds: Int,
-    val progressPercentage: Int
-)*/

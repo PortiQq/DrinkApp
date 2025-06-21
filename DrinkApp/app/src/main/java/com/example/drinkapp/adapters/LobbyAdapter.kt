@@ -30,38 +30,58 @@ class LobbyAdapter(
         fun bind(lobby: Lobby) {
             binding.textLobbyName.text = lobby.name
             binding.textPeopleCount.text = "${lobby.people.size} people"
-            binding.textCurrentDrink.text = "Current drink: ${lobby.currentDrink.name}"
+            binding.textDrinkType.text = lobby.currentDrink.name
 
             // Show timer status
             if (lobby.isTimerActive) {
                 val minutes = lobby.remainingTimeSeconds / 60
                 val seconds = lobby.remainingTimeSeconds % 60
-                binding.textTimerStatus.text = "⏱️ Timer: ${String.format("%02d:%02d", minutes, seconds)}"
-                binding.textTimerStatus.visibility = android.view.View.VISIBLE
+                binding.textTimer.text = String.format("%02d:%02d", minutes, seconds)
+                binding.textTimerStatus.text = "Next drink in"
+                binding.textStatus.text = "Active"
+                binding.textStatus.setTextColor(
+                    androidx.core.content.ContextCompat.getColor(
+                        binding.root.context,
+                        com.example.drinkapp.R.color.primary
+                    )
+                )
+                binding.viewStatusIndicator.setBackgroundColor(
+                    androidx.core.content.ContextCompat.getColor(
+                        binding.root.context,
+                        com.example.drinkapp.R.color.primary
+                    )
+                )
+                /*
+                // Set progress bar
+                val totalTime = lobby.currentDrink.durationSeconds
+                val progress = if (totalTime > 0) {
+                    ((totalTime - lobby.remainingTimeSeconds) * 100) / totalTime
+                } else 0
+                binding.progressBarTimer.progress = progress
+                binding.progressBarTimer.visibility = android.view.View.VISIBLE
+                */
             } else {
-                binding.textTimerStatus.visibility = android.view.View.GONE
+                binding.textTimer.text = "00:00"
+                binding.textTimerStatus.text = "Ready to drink"
+                binding.textStatus.text = "Inactive"
+                binding.textStatus.setTextColor(
+                    androidx.core.content.ContextCompat.getColor(
+                        binding.root.context,
+                        android.R.color.darker_gray
+                    )
+                )
+                binding.viewStatusIndicator.setBackgroundColor(
+                    androidx.core.content.ContextCompat.getColor(
+                        binding.root.context,
+                        android.R.color.darker_gray
+                    )
+                )
+                binding.progressBarTimer.visibility = android.view.View.GONE
             }
 
             // Set click listeners
             binding.root.setOnClickListener { onLobbyClick(lobby) }
             binding.buttonDeleteLobby.setOnClickListener { onLobbyDelete(lobby) }
-
-            // Set background based on timer status
-            if (lobby.isTimerActive) {
-                binding.cardLobby.setCardBackgroundColor(
-                    androidx.core.content.ContextCompat.getColor(
-                        binding.root.context,
-                        android.R.color.holo_orange_light
-                    )
-                )
-            } else {
-                binding.cardLobby.setCardBackgroundColor(
-                    androidx.core.content.ContextCompat.getColor(
-                        binding.root.context,
-                        android.R.color.white
-                    )
-                )
-            }
         }
     }
 }

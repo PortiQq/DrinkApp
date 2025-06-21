@@ -14,11 +14,12 @@ import com.example.drinkapp.models.Drink
 import com.example.drinkapp.models.Gender
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Person
+import com.example.drinkapp.models.TimerState
 import com.example.drinkapp.utils.AlcoholCalculator
 import com.example.drinkapp.viewmodel.LobbyViewModel
 import com.example.drinkapp.adapters.PersonAdapter
 import com.example.drinkapp.databinding.ActivityLobbyBinding
-import com.example.drinkapp.viewmodel.TimerState
+
 
 class LobbyActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLobbyBinding
@@ -203,6 +204,8 @@ class LobbyActivity : AppCompatActivity() {
     override fun onDestroy() {
         super.onDestroy()
         // Save lobby state when leaving
-        viewModel.saveLobbyState()
+        if (::viewModel.isInitialized) {
+            viewModel.saveLobbyState()
+        }
     }
 }

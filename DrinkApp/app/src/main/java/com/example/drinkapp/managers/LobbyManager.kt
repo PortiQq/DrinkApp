@@ -4,6 +4,7 @@ import android.os.CountDownTimer
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.TimerState
 
 object LobbyManager {
     private val lobbies = mutableMapOf<String, Lobby>()
