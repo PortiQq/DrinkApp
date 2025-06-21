@@ -6,7 +6,7 @@ data class Lobby(
     val id: String = java.util.UUID.randomUUID().toString(),
     val name: String,
     val people: MutableList<Person> = mutableListOf(),
-    val currentDrink: Drink,
+    var currentDrink: Drink,
     var isTimerActive: Boolean = false,
     var remainingTimeSeconds: Int = 0
 ) {
@@ -19,7 +19,7 @@ data class Lobby(
     }
 
     fun getSafestWaitTime(): Int {
-        if (people.isEmpty()) return 3600 // 1 hour default
+        if (people.isEmpty()) return 60
 
         return people.maxOf { person ->
             AlcoholCalculator.calculateSafeWaitTimeMinutes(person, currentDrink)

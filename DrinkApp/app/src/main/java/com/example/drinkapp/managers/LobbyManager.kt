@@ -16,14 +16,9 @@ object LobbyManager {
     }
 
     fun removeLobby(lobbyId: String) {
-        // Cancel and remove timer
         timers[lobbyId]?.cancel()
         timers.remove(lobbyId)
-
-        // Remove callback
         timerCallbacks.remove(lobbyId)
-
-        // Remove lobby
         lobbies.remove(lobbyId)
     }
 
@@ -32,53 +27,50 @@ object LobbyManager {
     }
 
     fun addPersonToLobby(lobbyId: String, person: Person) {
-        lobbies[lobbyId]?.addPerson(person)
+        lobbies[lobbyId]?.let { lobby ->
+            lobby.addPerson(person)
+        }
     }
 
     fun removePersonFromLobby(lobbyId: String, personId: String) {
-        lobbies[lobbyId]?.removePerson(personId)
+        lobbies[lobbyId]?.let { lobby ->
+            lobby.removePerson(personId)
+        }
     }
 
     fun updateLobbyDrink(lobbyId: String, drink: Drink) {
         lobbies[lobbyId]?.let { lobby ->
-            lobbies[lobbyId] = lobby.copy(currentDrink = drink)
+            lobby.currentDrink = drink
         }
     }
 
     fun startLobbyTimer(lobbyId: String) {
         val lobby = lobbies[lobbyId] ?: return
 
-        // Cancel existing timer
         timers[lobbyId]?.cancel()
 
-        val durationSeconds = lobby.getSafestWaitTime() * 60 // Convert minutes to seconds
+        val durationSeconds = lobby.getSafestWaitTime() * 60 // min -> s
 
-        // Update lobby state
         lobby.isTimerActive = true
         lobby.remainingTimeSeconds = durationSeconds
 
-        // Create new timer
+        // Create a new timer
         timers[lobbyId] = object : CountDownTimer(durationSeconds * 1000L, 1000) {
             override fun onTick(millisUntilFinished: Long) {
                 val secondsLeft = (millisUntilFinished / 1000).toInt()
                 val progressPercentage = ((durationSeconds - secondsLeft) * 100) / durationSeconds
 
-                // Update lobby state
                 lobby.remainingTimeSeconds = secondsLeft
 
-                // Notify callback
                 timerCallbacks[lobbyId]?.invoke(TimerState(secondsLeft, progressPercentage))
             }
 
             override fun onFinish() {
-                // Update lobby state
                 lobby.isTimerActive = false
                 lobby.remainingTimeSeconds = 0
 
-                // Notify callback
                 timerCallbacks[lobbyId]?.invoke(TimerState(0, 100))
 
-                // Remove timer
                 timers.remove(lobbyId)
             }
         }.start()
@@ -97,14 +89,11 @@ object LobbyManager {
     }
 
     fun clearAllLobbies() {
-        // Cancel all timers
         timers.values.forEach { it.cancel() }
         timers.clear()
 
-        // Clear callbacks
         timerCallbacks.clear()
 
-        // Clear lobbies
         lobbies.clear()
     }
 }

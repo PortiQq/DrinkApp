@@ -13,23 +13,28 @@ class LobbyListViewModel : ViewModel() {
     private val lobbyList = mutableListOf<Lobby>()
 
     init {
-        _lobbies.value = emptyList()
+        refreshLobbies()
+    }
+
+    private fun refreshLobbies() {
+        _lobbies.value = LobbyManager.getAllLobbies()
     }
 
     fun addLobby(lobby: Lobby) {
-        lobbyList.add(lobby)
-        _lobbies.value = lobbyList.toList()
 
-        // Store reference for LobbyManager
         LobbyManager.addLobby(lobby)
+        //_lobbies.value = lobbyList.toList()
+        refreshLobbies()
+        // Store reference for LobbyManager
+        //LobbyManager.addLobby(lobby)
     }
 
     fun removeLobby(lobbyId: String) {
         // Stop any active timer for this lobby
         LobbyManager.removeLobby(lobbyId)
-
-        lobbyList.removeIf { it.id == lobbyId }
-        _lobbies.value = lobbyList.toList()
+        refreshLobbies()
+        //lobbyList.removeIf { it.id == lobbyId }
+        //_lobbies.value = lobbyList.toList()
     }
 
     fun getLobby(lobbyId: String): Lobby? {
@@ -38,11 +43,17 @@ class LobbyListViewModel : ViewModel() {
 
     // Update lobby in the list (for timer updates)
     fun updateLobby(lobby: Lobby) {
-        val index = lobbyList.indexOfFirst { it.id == lobby.id }
+        /*val index = lobbyList.indexOfFirst { it.id == lobby.id }
         if (index != -1) {
             lobbyList[index] = lobby
             _lobbies.value = lobbyList.toList()
-        }
+        }*/
+        refreshLobbies()
+    }
+
+    // Add method to manually refresh lobbies (useful when returning from LobbyActivity)
+    fun onResume() {
+        refreshLobbies()
     }
 
     override fun onCleared() {

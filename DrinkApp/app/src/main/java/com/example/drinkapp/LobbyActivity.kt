@@ -97,7 +97,6 @@ class LobbyActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.fabAddPerson.setOnClickListener {
-            // Use the activity result launcher instead of startActivity
             val intent = Intent(this, AddPersonActivity::class.java)
             addPersonLauncher.launch(intent)
         }

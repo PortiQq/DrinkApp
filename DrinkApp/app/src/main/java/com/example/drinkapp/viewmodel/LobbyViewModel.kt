@@ -10,8 +10,8 @@ import com.example.drinkapp.models.Drink
 import com.example.drinkapp.models.TimerState
 
 class LobbyViewModel : ViewModel() {
-    private val _lobby = MutableLiveData<Lobby>()
-    val lobby: LiveData<Lobby> = _lobby
+    private val _lobby = MutableLiveData<Lobby?>()
+    val lobby: LiveData<Lobby?> = _lobby
 
     private val _timerState = MutableLiveData<TimerState>()
     val timerState: LiveData<TimerState> = _timerState
@@ -21,8 +21,6 @@ class LobbyViewModel : ViewModel() {
 
     private var lobbyId: String? = null
 
-    //private var countDownTimer: CountDownTimer? = null
-
     init {
         _timerState.value = TimerState(0, 0)
     }
@@ -30,12 +28,20 @@ class LobbyViewModel : ViewModel() {
     fun initializeLobby(lobbyId: String) {
         this.lobbyId = lobbyId
         val lobby = LobbyManager.getLobby(lobbyId)
-        //_lobby.value = lobby
+        _lobby.value = lobby
 
         // Set up timer state observer
         lobby?.let {
             LobbyManager.setTimerStateCallback(lobbyId) { timerState ->
                 _timerState.postValue(timerState)
+            }
+            // If lobby has active timer, sync the timer state
+            if (it.isTimerActive && it.remainingTimeSeconds > 0) {
+                val totalTime = it.getSafestWaitTime() * 60
+                val progressPercentage = if (totalTime > 0) {
+                    ((totalTime - it.remainingTimeSeconds) * 100) / totalTime
+                } else 0
+                _timerState.value = TimerState(it.remainingTimeSeconds, progressPercentage)
             }
         }
     }
@@ -71,6 +77,10 @@ class LobbyViewModel : ViewModel() {
 
             LobbyManager.startLobbyTimer(id)
             _lobby.value = LobbyManager.getLobby(id)
+            if (lobby?.isTimerActive == true && lobby.remainingTimeSeconds > 0) {
+                _showWarning.value = true
+                return
+            }
         }
     }
 

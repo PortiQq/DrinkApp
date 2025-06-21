@@ -50,6 +50,11 @@ class LobbyListActivity : AppCompatActivity() {
         setupToolbar()
     }
 
+    override fun onResume() {
+        super.onResume()
+        viewModel.onResume() // Refresh
+    }
+
     private fun setupViewModel() {
         viewModel = ViewModelProvider(this)[LobbyListViewModel::class.java]
     }
@@ -74,6 +79,10 @@ class LobbyListActivity : AppCompatActivity() {
             val intent = Intent(this, CreateLobbyActivity::class.java)
             createLobbyLauncher.launch(intent)
         }
+        binding.buttonCreateFirstLobby.setOnClickListener {
+            val intent = Intent(this, CreateLobbyActivity::class.java)
+            createLobbyLauncher.launch(intent)
+        }
     }
 
     private fun observeViewModel() {
@@ -91,7 +100,6 @@ class LobbyListActivity : AppCompatActivity() {
             else -> "${lobbies.size} active lobbies"
         }
 
-        // Show empty state
         binding.textEmptyState.visibility = if (lobbies.isEmpty()) {
             android.view.View.VISIBLE
         } else {
