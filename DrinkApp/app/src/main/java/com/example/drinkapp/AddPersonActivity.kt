@@ -1,26 +1,21 @@
 package com.example.drinkapp
 
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.ViewModelProvider
 import com.example.drinkapp.databinding.ActivityAddPersonBinding
 import com.example.drinkapp.models.Gender
 import com.example.drinkapp.models.Person
-import com.example.drinkapp.viewmodel.DrinkAppViewModel
 
 class AddPersonActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAddPersonBinding
-    private lateinit var viewModel: DrinkAppViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityAddPersonBinding.inflate(layoutInflater)
         setContentView(binding.root)
-
-        // Get shared ViewModel
-        viewModel = ViewModelProvider(this)[DrinkAppViewModel::class.java]
 
         setupClickListeners()
         setupToolbar()
@@ -100,7 +95,17 @@ class AddPersonActivity : AppCompatActivity() {
             heightCm = height
         )
 
-        viewModel.addPerson(person)
+        // Create result intent with person data
+        val resultIntent = Intent().apply {
+            putExtra("person_name", person.name)
+            putExtra("person_gender", person.gender.name)
+            putExtra("person_age", person.age)
+            putExtra("person_weight", person.weightKg)
+            putExtra("person_height", person.heightCm)
+            putExtra("person_id", person.id)
+        }
+
+        setResult(RESULT_OK, resultIntent)
         Toast.makeText(this, "$name added to party!", Toast.LENGTH_SHORT).show()
         finish()
     }

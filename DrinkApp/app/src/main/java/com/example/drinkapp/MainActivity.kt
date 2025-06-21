@@ -1,16 +1,17 @@
 package com.example.drinkapp
 
-import android.R
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.Gender
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.utils.AlcoholCalculator
@@ -23,6 +24,42 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     private lateinit var viewModel: DrinkAppViewModel
     private lateinit var personAdapter: PersonAdapter
+
+    // Activity result launcher for AddPersonActivity
+    private val addPersonLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ) { result ->
+        if (result.resultCode == RESULT_OK) {
+            result.data?.let { data ->
+                // Extract person data from intent
+                val name = data.getStringExtra("person_name") ?: return@let
+                val genderString = data.getStringExtra("person_gender") ?: return@let
+                val age = data.getIntExtra("person_age", 0)
+                val weight = data.getDoubleExtra("person_weight", 0.0)
+                val height = data.getIntExtra("person_height", 0)
+                val id = data.getStringExtra("person_id") ?: return@let
+
+                // Create person object
+                val gender = try {
+                    Gender.valueOf(genderString)
+                } catch (e: IllegalArgumentException) {
+                    Gender.MALE // Default fallback
+                }
+
+                val person = Person(
+                    id = id,
+                    name = name,
+                    gender = gender,
+                    age = age,
+                    weightKg = weight,
+                    heightCm = height
+                )
+
+                // Add person to ViewModel
+                viewModel.addPerson(person)
+            }
+        }
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -50,7 +87,9 @@ class MainActivity : AppCompatActivity() {
 
     private fun setupClickListeners() {
         binding.fabAddPerson.setOnClickListener {
-            startActivity(Intent(this, AddPersonActivity::class.java))
+            // Use the activity result launcher instead of startActivity
+            val intent = Intent(this, AddPersonActivity::class.java)
+            addPersonLauncher.launch(intent)
         }
 
         binding.buttonDrinkUp.setOnClickListener {

@@ -5,19 +5,25 @@ import com.example.drinkapp.models.Drink
 
 object AlcoholCalculator {
     private const val METABOLISM_RATE_BAC_PER_HOUR = 0.015 // Standard BAC reduction per hour
-    private const val SAFETY_MARGIN_MULTIPLIER = 1.2 // 20% safety buffer
+    private const val SAFETY_MARGIN_MULTIPLIER = 1.0 // 50% safety buffer for groups
 
     /**
-     * Calculate Blood Alcohol Content using Widmark formula
+     * Calculate Blood Alcohol Content using simplified Widmark formula
+     * BAC = (grams of alcohol) / (body weight in kg × gender coefficient)
+     * Result is in g/100ml (which equals BAC percentage)
      */
     fun calculateBAC(
         alcoholGrams: Double,
         person: Person,
         hoursElapsed: Double = 0.0
     ): Double {
-        val bac = (alcoholGrams / (person.weightKg * person.gender.distributionCoefficient)) -
-                (METABOLISM_RATE_BAC_PER_HOUR * hoursElapsed)
-        return maxOf(0.0, bac)
+        // Simplified Widmark formula
+        val peakBAC = alcoholGrams / (person.weightKg * person.gender.distributionCoefficient * 10.0)
+
+        // Subtract metabolism over time
+        val currentBAC = peakBAC - (METABOLISM_RATE_BAC_PER_HOUR * hoursElapsed)
+
+        return maxOf(0.0, currentBAC)
     }
 
     /**

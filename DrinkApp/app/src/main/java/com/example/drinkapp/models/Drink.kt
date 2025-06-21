@@ -7,7 +7,11 @@ data class Drink(
     val category: DrinkCategory = DrinkCategory.OTHER
 )  {
     fun getAlcoholGrams(): Double {
-        return (alcoholPercentage / 100) * volumeMl * 0.8 // 0.8 = alcohol density g/ml
+        // Calculate pure alcohol volume in ml
+        val alcoholVolumeMl = (alcoholPercentage / 100.0) * volumeMl
+
+        // Convert to grams using ethanol density (0.789 g/ml)
+        return alcoholVolumeMl * 0.789
     }
 
     companion object {
@@ -19,6 +23,8 @@ data class Drink(
             Drink("Cocktail", 15.0, 200, DrinkCategory.COCKTAIL)
         )
     }
-}enum class DrinkCategory {
+}
+
+enum class DrinkCategory {
     BEER, WINE, SPIRIT, COCKTAIL, OTHER
 }
