@@ -4,11 +4,12 @@ import android.os.CountDownTimer
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.example.drinkapp.managers.LobbyManager
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Drink
 
-class DrinkAppViewModel : ViewModel() {
+class LobbyViewModel : ViewModel() {
     private val _lobby = MutableLiveData<Lobby>()
     val lobby: LiveData<Lobby> = _lobby
 
@@ -18,54 +19,90 @@ class DrinkAppViewModel : ViewModel() {
     private val _showWarning = MutableLiveData<Boolean>()
     val showWarning: LiveData<Boolean> = _showWarning
 
-    private var countDownTimer: CountDownTimer? = null
+    private var lobbyId: String? = null
+
+    //private var countDownTimer: CountDownTimer? = null
 
     init {
-        _lobby.value = Lobby(
-            "Main Party", currentDrink = Drink.COMMON_DRINKS[0],
-            name = ""
-        )
         _timerState.value = TimerState(0, 0)
     }
 
+    fun initializeLobby(lobbyId: String) {
+        this.lobbyId = lobbyId
+        val lobby = LobbyManager.getLobby(lobbyId)
+        _lobby.value = lobby
+
+        // Set up timer state observer
+        lobby?.let {
+            LobbyManager.setTimerStateCallback(lobbyId) { timerState ->
+                _timerState.postValue(timerState)
+            }
+        }
+    }
+
     fun addPerson(person: Person) {
-        _lobby.value?.let { currentLobby ->
-            currentLobby.addPerson(person)
-            _lobby.value = currentLobby.copy()
+        lobbyId?.let { id ->
+            LobbyManager.addPersonToLobby(id, person)
+            _lobby.value = LobbyManager.getLobby(id)
         }
     }
 
     fun removePerson(personId: String) {
-        _lobby.value?.let { currentLobby ->
-            currentLobby.removePerson(personId)
-            _lobby.value = currentLobby.copy()
+        lobbyId?.let { id ->
+            LobbyManager.removePersonFromLobby(id, personId)
+            _lobby.value = LobbyManager.getLobby(id)
         }
     }
 
     fun updateCurrentDrink(drink: Drink) {
-        _lobby.value?.let { currentLobby ->
-            _lobby.value = currentLobby.copy(currentDrink = drink)
+        lobbyId?.let { id ->
+            LobbyManager.updateLobbyDrink(id, drink)
+            _lobby.value = LobbyManager.getLobby(id)
         }
     }
 
     fun startDrinking() {
-        _lobby.value?.let { currentLobby ->
-            if (currentLobby.isTimerActive && currentLobby.remainingTimeSeconds > 0) {
+        lobbyId?.let { id ->
+            val lobby = LobbyManager.getLobby(id)
+            if (lobby?.isTimerActive == true && lobby.remainingTimeSeconds > 0) {
                 _showWarning.value = true
                 return
             }
 
-            startTimer(currentLobby.getSafestWaitTime() * 60) // Convert minutes to seconds
+            LobbyManager.startLobbyTimer(id)
+            _lobby.value = LobbyManager.getLobby(id)
         }
     }
 
     fun overrideTimer() {
-        _lobby.value?.let { currentLobby ->
-            startTimer(currentLobby.getSafestWaitTime() * 60)
+        lobbyId?.let { id ->
+            LobbyManager.startLobbyTimer(id)
+            _lobby.value = LobbyManager.getLobby(id)
         }
         _showWarning.value = false
     }
 
+    fun getRemainingTime(): Int {
+        return lobbyId?.let { LobbyManager.getLobby(it)?.remainingTimeSeconds } ?: 0
+    }
+
+    fun getCurrentDrink(): Drink {
+        return lobbyId?.let { LobbyManager.getLobby(it)?.currentDrink } ?: Drink.COMMON_DRINKS[0]
+    }
+
+    fun saveLobbyState() {
+        // This method can be used to persist lobby state when activity is destroyed
+        // For now, the state is maintained in LobbyManager
+    }
+
+    override fun onCleared() {
+        super.onCleared()
+        // Remove timer callback when ViewModel is cleared
+        lobbyId?.let { LobbyManager.removeTimerStateCallback(it) }
+    }
+}
+
+    /*
     private fun startTimer(durationSeconds: Int) {
         countDownTimer?.cancel()
 
@@ -118,4 +155,4 @@ class DrinkAppViewModel : ViewModel() {
 data class TimerState(
     val remainingSeconds: Int,
     val progressPercentage: Int
-)
+)*/

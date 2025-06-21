@@ -15,15 +15,16 @@ import com.example.drinkapp.models.Gender
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.utils.AlcoholCalculator
-import com.example.drinkapp.viewmodel.DrinkAppViewModel
+import com.example.drinkapp.viewmodel.LobbyViewModel
 import com.example.drinkapp.adapters.PersonAdapter
-import com.example.drinkapp.databinding.ActivityMainBinding
+import com.example.drinkapp.databinding.ActivityLobbyBinding
 import com.example.drinkapp.viewmodel.TimerState
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
-    private lateinit var viewModel: DrinkAppViewModel
+class LobbyActivity : AppCompatActivity() {
+    private lateinit var binding: ActivityLobbyBinding
+    private lateinit var viewModel: LobbyViewModel
     private lateinit var personAdapter: PersonAdapter
+    private var lobbyId: String? = null
 
     // Activity result launcher for AddPersonActivity
     private val addPersonLauncher = registerForActivityResult(
@@ -63,8 +64,15 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityLobbyBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Get lobby ID from intent
+        lobbyId = intent.getStringExtra("lobby_id")
+        if (lobbyId == null) {
+            finish()
+            return
+        }
 
         setupViewModel()
         setupRecyclerView()
@@ -73,7 +81,8 @@ class MainActivity : AppCompatActivity() {
     }
 
     private fun setupViewModel() {
-        viewModel = ViewModelProvider(this)[DrinkAppViewModel::class.java]
+        viewModel = ViewModelProvider(this)[LobbyViewModel::class.java]
+        lobbyId?.let { viewModel.initializeLobby(it) }
     }
 
     private fun setupRecyclerView() {
@@ -119,7 +128,15 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun updateUI(lobby: Lobby) {
+    private fun updateUI(lobby: Lobby?) {
+        if (lobby == null) return
+
+        // Update toolbar with lobby name
+        supportActionBar?.apply {
+            title = lobby.name
+            setDisplayHomeAsUpEnabled(true)
+        }
+
         personAdapter.submitList(lobby.people.toList())
         binding.textPeopleCount.text = "${lobby.people.size} people"
 
@@ -136,7 +153,7 @@ class MainActivity : AppCompatActivity() {
 
         // Update button state
         binding.buttonDrinkUp.isEnabled = lobby.people.isNotEmpty()
-        binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Override Timer" else "🍻 Drink Up!"
+        binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Drink Up ⚠" else "🍻 Drink Up!"
     }
 
     private fun updateTimer(timerState: TimerState) {
@@ -176,5 +193,16 @@ class MainActivity : AppCompatActivity() {
         val minutes = seconds / 60
         val remainingSeconds = seconds % 60
         return String.format("%02d:%02d", minutes, remainingSeconds)
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        finish()
+        return true
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        // Save lobby state when leaving
+        viewModel.saveLobbyState()
     }
 }
