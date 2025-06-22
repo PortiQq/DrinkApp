@@ -1,6 +1,8 @@
 package com.example.drinkapp.managers
 
 import android.os.CountDownTimer
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.models.Drink
@@ -11,8 +13,27 @@ object LobbyManager {
     private val timers = mutableMapOf<String, CountDownTimer>()
     private val timerCallbacks = mutableMapOf<String, (TimerState) -> Unit>()
 
+    //LiveData for lobbies
+    private val _lobbiesLiveData = MutableLiveData<List<Lobby>>()
+    val lobbiesLiveData: LiveData<List<Lobby>> = _lobbiesLiveData
+
+    init {
+        _lobbiesLiveData.postValue(emptyList())
+    }
+
+    private fun notifyLobbiesChanged() {
+        // copy of lobbies for LiveData detecting changes
+        val lobbiesCopy = lobbies.values.map { lobby ->
+            lobby.copy(
+                people = lobby.people.toMutableList()
+            )
+        }
+        _lobbiesLiveData.postValue(lobbiesCopy)
+    }
+
     fun addLobby(lobby: Lobby) {
         lobbies[lobby.id] = lobby
+        notifyLobbiesChanged()
     }
 
     fun removeLobby(lobbyId: String) {
@@ -20,6 +41,7 @@ object LobbyManager {
         timers.remove(lobbyId)
         timerCallbacks.remove(lobbyId)
         lobbies.remove(lobbyId)
+        notifyLobbiesChanged()
     }
 
     fun getLobby(lobbyId: String): Lobby? {
@@ -29,18 +51,21 @@ object LobbyManager {
     fun addPersonToLobby(lobbyId: String, person: Person) {
         lobbies[lobbyId]?.let { lobby ->
             lobby.addPerson(person)
+            notifyLobbiesChanged()
         }
     }
 
     fun removePersonFromLobby(lobbyId: String, personId: String) {
         lobbies[lobbyId]?.let { lobby ->
             lobby.removePerson(personId)
+            notifyLobbiesChanged()
         }
     }
 
     fun updateLobbyDrink(lobbyId: String, drink: Drink) {
         lobbies[lobbyId]?.let { lobby ->
             lobby.currentDrink = drink
+            notifyLobbiesChanged()
         }
     }
 
@@ -53,6 +78,7 @@ object LobbyManager {
 
         lobby.isTimerActive = true
         lobby.remainingTimeSeconds = durationSeconds
+        notifyLobbiesChanged()
 
         // Create a new timer
         timers[lobbyId] = object : CountDownTimer(durationSeconds * 1000L, 1000) {
@@ -63,6 +89,11 @@ object LobbyManager {
                 lobby.remainingTimeSeconds = secondsLeft
 
                 timerCallbacks[lobbyId]?.invoke(TimerState(secondsLeft, progressPercentage))
+
+                // Notify changes every 5 seconds to update the list
+                if (secondsLeft % 5 == 0) {
+                    notifyLobbiesChanged()
+                }
             }
 
             override fun onFinish() {
@@ -72,6 +103,7 @@ object LobbyManager {
                 timerCallbacks[lobbyId]?.invoke(TimerState(0, 100))
 
                 timers.remove(lobbyId)
+                notifyLobbiesChanged()
             }
         }.start()
     }
@@ -95,5 +127,6 @@ object LobbyManager {
         timerCallbacks.clear()
 
         lobbies.clear()
+        notifyLobbiesChanged()
     }
 }

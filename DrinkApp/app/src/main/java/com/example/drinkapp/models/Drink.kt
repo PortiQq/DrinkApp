@@ -16,11 +16,11 @@ data class Drink(
 
     companion object {
         val COMMON_DRINKS = listOf(
-            Drink("Beer", 5.0, 500, DrinkCategory.BEER),
-            Drink("Wine", 12.0, 150, DrinkCategory.WINE),
-            Drink("Vodka Shot", 40.0, 40, DrinkCategory.SPIRIT),
-            Drink("Whiskey Shot", 40.0, 40, DrinkCategory.SPIRIT),
-            Drink("Cocktail", 15.0, 200, DrinkCategory.COCKTAIL)
+            Drink("Beer 500ml", 5.0, 500, DrinkCategory.BEER),
+            Drink("Wine 150ml", 12.0, 150, DrinkCategory.WINE),
+            Drink("Vodka 40ml", 40.0, 40, DrinkCategory.SPIRIT),
+            Drink("Whiskey 40ml", 40.0, 40, DrinkCategory.SPIRIT),
+            Drink("Cocktail 200ml", 15.0, 200, DrinkCategory.COCKTAIL)
         )
     }
 }

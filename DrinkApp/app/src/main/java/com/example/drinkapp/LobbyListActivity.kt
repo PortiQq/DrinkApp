@@ -18,11 +18,6 @@ class LobbyListActivity : AppCompatActivity() {
     private lateinit var viewModel: LobbyListViewModel
     private lateinit var lobbyAdapter: LobbyAdapter
 
-    // Add these new properties
-    private var refreshTimer: android.os.CountDownTimer? = null
-    private var hasActiveTimers = false
-
-    // Activity result launcher for CreateLobbyActivity
     private val createLobbyLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
     ) { result ->
@@ -52,12 +47,6 @@ class LobbyListActivity : AppCompatActivity() {
         setupClickListeners()
         observeViewModel()
         setupToolbar()
-    }
-
-    override fun onResume() {
-        super.onResume()
-        viewModel.forceRefresh() // Zamiast viewModel.onResume(
-        //viewModel.onResume() // Refresh
     }
 
     private fun setupViewModel() {
@@ -90,26 +79,11 @@ class LobbyListActivity : AppCompatActivity() {
         }
     }
 
-    private fun setupRefreshTimer() {
-        refreshTimer?.cancel()
-
-        if (hasActiveTimers) {
-            refreshTimer = object : android.os.CountDownTimer(Long.MAX_VALUE, 1000) {
-                override fun onTick(millisUntilFinished: Long) {
-                    viewModel.onResume() // Refresh every second
-                }
-                override fun onFinish() {}
-            }.start()
-        }
-    }
-
     private fun observeViewModel() {
+        // Observe lobbies LiveData - will automatically update when any lobby changes
         viewModel.lobbies.observe(this) { lobbies ->
+            android.util.Log.d("LobbyListActivity", "Received ${lobbies.size} lobbies update")
             updateUI(lobbies)
-
-            // Check if any lobby has active timers
-            hasActiveTimers = lobbies.any { it.isTimerActive }
-            setupRefreshTimer()
         }
     }
 
@@ -145,15 +119,5 @@ class LobbyListActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
-    }
-
-    override fun onPause() {
-        super.onPause()
-        refreshTimer?.cancel()
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        refreshTimer?.cancel()
     }
 }

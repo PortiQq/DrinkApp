@@ -1,29 +1,26 @@
 package com.example.drinkapp.models
 
-/**
- * Data class representing the current state of a drinking timer
- * Used to communicate timer updates between LobbyManager and ViewModels
- */
 data class TimerState(
     val remainingSeconds: Int,
     val progressPercentage: Int
 ) {
     /**
-     * Formats the remaining time as MM:SS string
+     *  HH:MM:SS string
      */
     fun getFormattedTime(): String {
-        val minutes = remainingSeconds / 60
+        val hours = remainingSeconds / 3600
+        val minutes = (remainingSeconds % 3600) / 60
         val seconds = remainingSeconds % 60
-        return String.format("%02d:%02d", minutes, seconds)
+        return String.format("%02d:%02d:%02d", hours, minutes, seconds)
     }
 
     /**
-     * Returns true if the timer has finished (no time remaining)
+     *  true if timer = 0
      */
     fun isFinished(): Boolean = remainingSeconds <= 0
 
     /**
-     * Returns true if the timer is currently active (has time remaining)
+     * true if timer still  active
      */
     fun isActive(): Boolean = remainingSeconds > 0
 
@@ -33,7 +30,7 @@ data class TimerState(
     fun getProgressFloat(): Float = progressPercentage / 100.0f
 
     /**
-     * Returns a user-friendly status message based on the timer state
+     *  status message based on timer state
      */
     fun getStatusMessage(): String {
         return when {
@@ -44,14 +41,23 @@ data class TimerState(
         }
     }
 
+    /**
+     * short format
+     */
+    fun getShortFormattedTime(): String {
+        val totalMinutes = remainingSeconds / 60
+        val seconds = remainingSeconds % 60
+        return String.format("%02d:%02d", totalMinutes, seconds)
+    }
+
     companion object {
         /**
-         * Creates a TimerState representing a finished/inactive timer
+         * finished timer
          */
         fun finished(): TimerState = TimerState(0, 100)
 
         /**
-         * Creates a TimerState representing an inactive timer (not started)
+         * inactive timer
          */
         fun inactive(): TimerState = TimerState(0, 0)
     }

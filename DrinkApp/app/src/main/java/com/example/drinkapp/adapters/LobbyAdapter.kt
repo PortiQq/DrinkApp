@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drinkapp.databinding.ItemLobbyBinding
 import com.example.drinkapp.models.Lobby
-import com.example.drinkapp.managers.LobbyManager
 
 class LobbyAdapter(
     private val onLobbyClick: (Lobby) -> Unit,
@@ -29,18 +28,16 @@ class LobbyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(lobby: Lobby) {
-
-            val freshLobby = LobbyManager.getLobby(lobby.id) ?: lobby
-
-            binding.textLobbyName.text = freshLobby.name
-            binding.textPeopleCount.text = "${freshLobby.people.size} people"
-            binding.textDrinkType.text = freshLobby.currentDrink.name
+            binding.textLobbyName.text = lobby.name
+            binding.textPeopleCount.text = "${lobby.people.size} people"
+            binding.textDrinkType.text = lobby.currentDrink.name
 
             // Show timer status
-            if (freshLobby.isTimerActive) {
-                val minutes = freshLobby.remainingTimeSeconds / 60
-                val seconds = freshLobby.remainingTimeSeconds % 60
-                binding.textTimer.text = String.format("%02d:%02d", minutes, seconds)
+            if (lobby.isTimerActive) {
+                val hours = lobby.remainingTimeSeconds / 3600
+                val minutes = (lobby.remainingTimeSeconds % 3600) / 60
+                val seconds = lobby.remainingTimeSeconds % 60
+                binding.textTimer.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
                 binding.textTimerStatus.text = "Next drink in"
                 binding.textStatus.text = "Active"
                 binding.textStatus.setTextColor(
@@ -55,17 +52,16 @@ class LobbyAdapter(
                         com.example.drinkapp.R.color.primary
                     )
                 )
-                /*
+                binding.progressBarTimer.visibility = android.view.View.VISIBLE
+
                 // Set progress bar
-                val totalTime = lobby.currentDrink.durationSeconds
+                val totalTime = lobby.getSafestWaitTime() * 60 // Convert to seconds
                 val progress = if (totalTime > 0) {
                     ((totalTime - lobby.remainingTimeSeconds) * 100) / totalTime
                 } else 0
                 binding.progressBarTimer.progress = progress
-                binding.progressBarTimer.visibility = android.view.View.VISIBLE
-                */
             } else {
-                binding.textTimer.text = "00:00"
+                binding.textTimer.text = "00:00:00"
                 binding.textTimerStatus.text = "Ready to drink"
                 binding.textStatus.text = "Inactive"
                 binding.textStatus.setTextColor(
@@ -84,8 +80,8 @@ class LobbyAdapter(
             }
 
             // Set click listeners
-            binding.root.setOnClickListener { onLobbyClick(freshLobby) }
-            binding.buttonDeleteLobby.setOnClickListener { onLobbyDelete(freshLobby) }
+            binding.root.setOnClickListener { onLobbyClick(lobby) }
+            binding.buttonDeleteLobby.setOnClickListener { onLobbyDelete(lobby) }
         }
     }
 }
@@ -96,14 +92,19 @@ class LobbyDiffCallback : DiffUtil.ItemCallback<Lobby>() {
     }
 
     override fun areContentsTheSame(oldItem: Lobby, newItem: Lobby): Boolean {
-        // Pobierz aktualne dane z LobbyManager dla porównania
-        val freshOld = LobbyManager.getLobby(oldItem.id) ?: oldItem
-        val freshNew = LobbyManager.getLobby(newItem.id) ?: newItem
+        val same = oldItem.name == newItem.name &&
+                oldItem.people.size == newItem.people.size &&
+                oldItem.currentDrink.name == newItem.currentDrink.name &&
+                oldItem.isTimerActive == newItem.isTimerActive &&
+                oldItem.remainingTimeSeconds == newItem.remainingTimeSeconds
 
-        return freshOld.name == freshNew.name &&
-                freshOld.people.size == freshNew.people.size &&
-                freshOld.currentDrink == freshNew.currentDrink &&
-                freshOld.isTimerActive == freshNew.isTimerActive &&
-                freshOld.remainingTimeSeconds == freshNew.remainingTimeSeconds
+        if (!same) {
+            android.util.Log.d("LobbyAdapter", "Content changed for ${oldItem.name}: " +
+                    "people ${oldItem.people.size}->${newItem.people.size}, " +
+                    "drink ${oldItem.currentDrink.name}->${newItem.currentDrink.name}, " +
+                    "timer ${oldItem.isTimerActive}->${newItem.isTimerActive}")
+        }
+
+        return same
     }
 }
