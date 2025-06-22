@@ -18,6 +18,10 @@ class LobbyListActivity : AppCompatActivity() {
     private lateinit var viewModel: LobbyListViewModel
     private lateinit var lobbyAdapter: LobbyAdapter
 
+    // Add these new properties
+    private var refreshTimer: android.os.CountDownTimer? = null
+    private var hasActiveTimers = false
+
     // Activity result launcher for CreateLobbyActivity
     private val createLobbyLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
@@ -85,14 +89,31 @@ class LobbyListActivity : AppCompatActivity() {
         }
     }
 
+    private fun setupRefreshTimer() {
+        refreshTimer?.cancel()
+
+        if (hasActiveTimers) {
+            refreshTimer = object : android.os.CountDownTimer(Long.MAX_VALUE, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    viewModel.onResume() // Refresh every second
+                }
+                override fun onFinish() {}
+            }.start()
+        }
+    }
+
     private fun observeViewModel() {
         viewModel.lobbies.observe(this) { lobbies ->
             updateUI(lobbies)
+
+            // Check if any lobby has active timers
+            hasActiveTimers = lobbies.any { it.isTimerActive }
+            setupRefreshTimer()
         }
     }
 
     private fun updateUI(lobbies: List<Lobby>) {
-        lobbyAdapter.submitList(lobbies)
+        lobbyAdapter.submitList(lobbies.toList()) // Create a new list to trigger DiffUtil
 
         binding.textLobbyCount.text = when (lobbies.size) {
             0 -> "No active lobbies"
@@ -123,5 +144,15 @@ class LobbyListActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        refreshTimer?.cancel()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        refreshTimer?.cancel()
     }
 }

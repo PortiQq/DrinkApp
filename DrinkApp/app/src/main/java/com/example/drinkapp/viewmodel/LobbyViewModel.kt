@@ -110,4 +110,25 @@ class LobbyViewModel : ViewModel() {
         // Remove timer callback when ViewModel is cleared
         lobbyId?.let { LobbyManager.removeTimerStateCallback(it) }
     }
+
+     fun onResume() {
+        lobbyId?.let { id ->
+            val lobby = LobbyManager.getLobby(id)
+            lobby?.let {
+                // Re-register the callback
+                LobbyManager.setTimerStateCallback(id) { timerState ->
+                    _timerState.postValue(timerState)
+                }
+
+                // Sync current timer state if timer is active
+                if (it.isTimerActive && it.remainingTimeSeconds > 0) {
+                    val totalTime = it.getSafestWaitTime() * 60
+                    val progressPercentage = if (totalTime > 0) {
+                        ((totalTime - it.remainingTimeSeconds) * 100) / totalTime
+                    } else 0
+                    _timerState.postValue(TimerState(it.remainingTimeSeconds, progressPercentage))
+                }
+            }
+        }
+    }
 }

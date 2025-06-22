@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drinkapp.databinding.ItemLobbyBinding
 import com.example.drinkapp.models.Lobby
+import com.example.drinkapp.managers.LobbyManager
 
 class LobbyAdapter(
     private val onLobbyClick: (Lobby) -> Unit,
@@ -28,14 +29,17 @@ class LobbyAdapter(
         RecyclerView.ViewHolder(binding.root) {
 
         fun bind(lobby: Lobby) {
-            binding.textLobbyName.text = lobby.name
-            binding.textPeopleCount.text = "${lobby.people.size} people"
-            binding.textDrinkType.text = lobby.currentDrink.name
+
+            val freshLobby = LobbyManager.getLobby(lobby.id) ?: lobby
+
+            binding.textLobbyName.text = freshLobby.name
+            binding.textPeopleCount.text = "${freshLobby.people.size} people"
+            binding.textDrinkType.text = freshLobby.currentDrink.name
 
             // Show timer status
-            if (lobby.isTimerActive) {
-                val minutes = lobby.remainingTimeSeconds / 60
-                val seconds = lobby.remainingTimeSeconds % 60
+            if (freshLobby.isTimerActive) {
+                val minutes = freshLobby.remainingTimeSeconds / 60
+                val seconds = freshLobby.remainingTimeSeconds % 60
                 binding.textTimer.text = String.format("%02d:%02d", minutes, seconds)
                 binding.textTimerStatus.text = "Next drink in"
                 binding.textStatus.text = "Active"
@@ -80,8 +84,8 @@ class LobbyAdapter(
             }
 
             // Set click listeners
-            binding.root.setOnClickListener { onLobbyClick(lobby) }
-            binding.buttonDeleteLobby.setOnClickListener { onLobbyDelete(lobby) }
+            binding.root.setOnClickListener { onLobbyClick(freshLobby) }
+            binding.buttonDeleteLobby.setOnClickListener { onLobbyDelete(freshLobby) }
         }
     }
 }

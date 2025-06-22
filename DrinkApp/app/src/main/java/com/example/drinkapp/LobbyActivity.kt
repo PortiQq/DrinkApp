@@ -200,6 +200,13 @@ class LobbyActivity : AppCompatActivity() {
         return true
     }
 
+    override fun onResume() {
+        super.onResume()
+        if (::viewModel.isInitialized) {
+            viewModel.onResume()  // Re-establish timer connection
+        }
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         // Save lobby state when leaving

@@ -17,24 +17,19 @@ class LobbyListViewModel : ViewModel() {
     }
 
     private fun refreshLobbies() {
-        _lobbies.value = LobbyManager.getAllLobbies()
+        val currentLobbies = LobbyManager.getAllLobbies()
+        _lobbies.value = currentLobbies
     }
 
     fun addLobby(lobby: Lobby) {
 
         LobbyManager.addLobby(lobby)
-        //_lobbies.value = lobbyList.toList()
         refreshLobbies()
-        // Store reference for LobbyManager
-        //LobbyManager.addLobby(lobby)
     }
 
     fun removeLobby(lobbyId: String) {
-        // Stop any active timer for this lobby
         LobbyManager.removeLobby(lobbyId)
         refreshLobbies()
-        //lobbyList.removeIf { it.id == lobbyId }
-        //_lobbies.value = lobbyList.toList()
     }
 
     fun getLobby(lobbyId: String): Lobby? {
@@ -43,11 +38,6 @@ class LobbyListViewModel : ViewModel() {
 
     // Update lobby in the list (for timer updates)
     fun updateLobby(lobby: Lobby) {
-        /*val index = lobbyList.indexOfFirst { it.id == lobby.id }
-        if (index != -1) {
-            lobbyList[index] = lobby
-            _lobbies.value = lobbyList.toList()
-        }*/
         refreshLobbies()
     }
 
