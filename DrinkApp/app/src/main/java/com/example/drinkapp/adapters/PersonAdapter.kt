@@ -8,6 +8,7 @@ import android.view.LayoutInflater
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.example.drinkapp.databinding.ItemPersonBinding
+import com.example.drinkapp.models.displayName
 
 class PersonAdapter(
     private val onPersonClick: (Person) -> Unit,
@@ -30,7 +31,7 @@ class PersonAdapter(
 
         fun bind(person: Person) {
             binding.textName.text = person.name
-            binding.textDetails.text = "${person.gender.name.lowercase().capitalize()} • ${person.age}y • ${person.weightKg}kg"
+            binding.textDetails.text = "${person.gender.displayName()} • ${person.age}y • ${person.weightKg}kg"
             binding.textGender.text = if (person.gender == Gender.MALE) "♂" else "♀"
 
             binding.root.setOnClickListener { onPersonClick(person) }

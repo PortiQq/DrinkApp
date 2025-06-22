@@ -30,7 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🍻 Create New Lobby"
+                    android:text="🍻 Tworzenie Lobby"
                     android:textSize="28sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/white" />
@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Set up a new party session for your group"
+                    android:text="Stwórz nowy pokój dla waszej grupy!"
                     android:textSize="14sp"
                     android:textColor="#E3F2FD"
                     android:layout_marginTop="4dp" />
@@ -63,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🏠 Lobby Details"
+                    android:text="🏠 Ustawienia pokoju"
                     android:textSize="18sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="16dp" />
@@ -78,14 +78,14 @@
                     app:boxCornerRadiusTopEnd="8dp"
                     app:boxCornerRadiusBottomStart="8dp"
                     app:boxCornerRadiusBottomEnd="8dp"
-                    app:helperText="Choose a fun name for your party!"
+                    app:helperText="Wybierz nazwę dla waszej imprezy!"
                     app:helperTextTextColor="@android:color/darker_gray">
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:id="@+id/edit_text_lobby_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Lobby Name (e.g., Friday Night Party)"
+                        android:hint="Nazwa pokoju (np Gorączka sobotniej nocy)"
                         android:inputType="text"
                         android:maxLines="1" />
 
@@ -95,7 +95,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="🍺 Starting Drink"
+                    android:text="🍺 Drink na start"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
@@ -103,7 +103,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Select the drink you'll start with"
+                    android:text="Wybierz drinka od którego zaczniecie"
                     android:textSize="14sp"
                     android:textColor="@android:color/darker_gray"
                     android:layout_marginBottom="12dp" />
@@ -118,7 +118,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="💡 You can change this anytime during the party"
+                    android:text="💡 Możesz zmienić drinka w dowolnym momencie"
                     android:textSize="12sp"
                     android:textColor="@android:color/darker_gray"
                     android:textStyle="italic" />
@@ -130,7 +130,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="⏰ Safety Level"
+            android:text="⏰ Poziom bezpieczeństwa"
             android:textSize="16sp"
             android:textStyle="bold"
             android:layout_marginBottom="12dp" />
@@ -146,7 +146,7 @@
                 android:id="@+id/radio_ultra_safe"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="🛡️ Ultra Safe"
+                android:text="🛡️ Najbezpieczniejszy"
                 android:textSize="16sp"
                 android:padding="12dp"
                 android:checked="true"
@@ -155,7 +155,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="100% of calculated time - Maximum safety"
+                android:text="100% obliczonego czasu - Maksymalne bezpieczeństwo"
                 android:textSize="12sp"
                 android:textColor="@android:color/darker_gray"
                 android:layout_marginStart="40dp"
@@ -165,7 +165,7 @@
                 android:id="@+id/radio_balanced"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="⚖️ Safe &amp; Fun"
+                android:text="⚖️ Zbalansowany"
                 android:textSize="16sp"
                 android:padding="12dp"
                 android:layout_marginBottom="8dp" />
@@ -173,7 +173,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="50% of calculated time - Balanced approach"
+                android:text="100% obliczonego czasu - Balans bezpieczeństwa i zabawy"
                 android:textSize="12sp"
                 android:textColor="@android:color/darker_gray"
                 android:layout_marginStart="40dp"
@@ -183,7 +183,7 @@
                 android:id="@+id/radio_party"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="🎉 Party Mode"
+                android:text="🎉 Impreza!"
                 android:textSize="16sp"
                 android:padding="12dp"
                 android:layout_marginBottom="8dp" />
@@ -191,7 +191,7 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="25% of calculated time - For experienced groups"
+                android:text="25% obliczonego czasu - Na własną odpowiedzialność!"
                 android:textSize="12sp"
                 android:textColor="@android:color/darker_gray"
                 android:layout_marginStart="40dp" />
@@ -230,7 +230,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="How it works"
+                        android:text="Wskazówki"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:textColor="#E65100" />
@@ -240,7 +240,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="• Add all party members to the lobby\n• DrinkApp calculates safe drinking times\n• Timer shows when it's safe for the next round\n• Everyone stays safe and has fun!"
+                    android:text="• Dodaj wszystkich uczestników do pokoju\n• DrinkApp obliczy czas między drinkami\n• Zegar pokazuje kiedy jest czas na nową kolejkę\n• Dobrej, bezpiecznej zabawy!"
                     android:textSize="14sp"
                     android:textColor="#BF360C"
                     android:lineSpacingExtra="2dp" />
@@ -262,7 +262,7 @@
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:layout_marginEnd="8dp"
-                android:text="Cancel"
+                android:text="Anuluj"
                 android:textSize="16sp"
                 app:strokeColor="@color/primary"
                 app:strokeWidth="2dp" />
@@ -273,7 +273,7 @@
                 android:layout_height="56dp"
                 android:layout_weight="1"
                 android:layout_marginStart="8dp"
-                android:text="🎉 Create Lobby"
+                android:text="🎉 Stwórz pokój"
                 android:textSize="16sp"
                 android:textStyle="bold"
                 app:backgroundTint="@color/primary"

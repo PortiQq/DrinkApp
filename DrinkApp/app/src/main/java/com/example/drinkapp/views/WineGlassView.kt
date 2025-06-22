@@ -75,7 +75,7 @@ class WineGlassView @JvmOverloads constructor(
         val glassTop = height * 0.1f
         val glassBottom = height * 0.6f
         val stemTop = glassBottom
-        val stemBottom = height * 0.85f
+        val stemBottom = height * 0.9f
         val baseY = height * 0.9f
 
         val glassTopWidth = width * 0.3f
@@ -114,8 +114,8 @@ class WineGlassView @JvmOverloads constructor(
         canvas.drawLine(centerX, stemTop, centerX, stemBottom, stemPaint)
 
         // Draw base
-        val baseLeft = centerX - width * 0.4f
-        val baseRight = centerX + width * 0.4f
+        val baseLeft = centerX - width * 0.25f
+        val baseRight = centerX + width * 0.25f
         canvas.drawLine(baseLeft, baseY, baseRight, baseY, basePaint)
 
         // Draw small circles at connection points for better visual

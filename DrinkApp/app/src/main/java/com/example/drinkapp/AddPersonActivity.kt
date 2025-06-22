@@ -23,7 +23,7 @@ class AddPersonActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         supportActionBar?.apply {
-            title = "Add Person"
+            title = "Dodaj osobę"
             setDisplayHomeAsUpEnabled(true)
         }
     }
@@ -48,31 +48,35 @@ class AddPersonActivity : AppCompatActivity() {
 
         when {
             name.isEmpty() -> {
-                binding.editTextName.error = "Name is required"
+                binding.editTextName.error = "Imię jest wymagane"
                 return false
             }
             ageText.isEmpty() || ageText.toIntOrNull() == null -> {
-                binding.editTextAge.error = "Valid age is required"
+                binding.editTextAge.error = "Wprowadź wiek"
                 return false
             }
             ageText.toInt() < 18 -> {
-                binding.editTextAge.error = "Must be 18 or older"
+                binding.editTextAge.error = "18 lat to za mało!"
+                return false
+            }
+            ageText.toInt() > 120 -> {
+                binding.editTextAge.error = "Wprowadź poprawny wiek!"
                 return false
             }
             weightText.isEmpty() || weightText.toDoubleOrNull() == null -> {
-                binding.editTextWeight.error = "Valid weight is required"
+                binding.editTextWeight.error = "Wprowadź wagę"
                 return false
             }
-            weightText.toDouble() < 30 || weightText.toDouble() > 300 -> {
-                binding.editTextWeight.error = "Weight must be between 30-300 kg"
+            weightText.toDouble() < 40 || weightText.toDouble() > 250 -> {
+                binding.editTextWeight.error = "Waga musi być w przedziale 40-250 kg"
                 return false
             }
             heightText.isEmpty() || heightText.toIntOrNull() == null -> {
-                binding.editTextHeight.error = "Valid height is required"
+                binding.editTextHeight.error = "Wprowadź wzrost"
                 return false
             }
             heightText.toInt() < 100 || heightText.toInt() > 250 -> {
-                binding.editTextHeight.error = "Height must be between 100-250 cm"
+                binding.editTextHeight.error = "Wzrost musi być w przedziale 100-250 cm"
                 return false
             }
         }
@@ -106,7 +110,7 @@ class AddPersonActivity : AppCompatActivity() {
         }
 
         setResult(RESULT_OK, resultIntent)
-        Toast.makeText(this, "$name added to party!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "$name Dodano do pokoju!", Toast.LENGTH_SHORT).show()
         finish()
     }
 

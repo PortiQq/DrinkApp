@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Manage your drinking lobbies"
+                        android:text="Twórz, przeglądaj i dołączaj do pokojów"
                         android:textSize="14sp"
                         android:textColor="#E3F2FD"
                         android:layout_marginTop="4dp" />
@@ -83,7 +83,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Active Lobbies"
+                            android:text="Aktywne Pokoje"
                             android:textSize="14sp"
                             android:textColor="@android:color/darker_gray" />
 
@@ -91,7 +91,8 @@
                             android:id="@+id/text_lobby_count"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="No active lobbies"
+                            android:text="Brak aktywnych pokoi
+"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/primary_dark" />
@@ -126,7 +127,7 @@
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="📋 Your Lobbies"
+                            android:text="📋 Twoje pokoje"
                             android:textSize="16sp"
                             android:textStyle="bold" />
 
@@ -162,16 +163,17 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="No lobbies yet!"
+                            android:text="Jeszcze nie powstał\nżaden pokój!"
                             android:textSize="18sp"
                             android:textStyle="bold"
+                            android:gravity="center"
                             android:textColor="@android:color/darker_gray"
                             android:layout_marginBottom="8dp" />
 
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Create your first lobby to start\na safe drinking party with friends"
+                            android:text="Stwórz pierwszy pokój\naby rozpocząć imprezę"
                             android:textSize="14sp"
                             android:textColor="@android:color/darker_gray"
                             android:gravity="center"
@@ -183,7 +185,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="16dp"
-                            android:text="Create First Lobby"
+                            android:text="Stwórz pierwszy pokój"
                             android:textSize="16sp"
                             android:textColor="@color/primary"
                             app:strokeColor="@color/primary" />
@@ -210,7 +212,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="💡 Quick Tips"
+                        android:text="💡 Wskazówki"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
@@ -218,7 +220,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="• Each lobby can have multiple people\n• DrinkApp calculates safe drinking times\n• Timers help you drink responsibly\n• Tap a lobby to join the party!"
+                        android:text="• Każdy pokój może mieć wiele osób\n• DrinkApp obliczy bezpieczny czas między kolejkami\n• Zegar pokaże czas do następnej kolejki\n• Kliknij w kartę pokoju aby dołączyć!"
                         android:textSize="14sp"
                         android:textColor="@android:color/darker_gray"
                         android:lineSpacingExtra="2dp" />
@@ -239,6 +241,6 @@
         android:src="@drawable/ic_add"
         app:backgroundTint="@color/primary"
         app:tint="@android:color/white"
-        android:contentDescription="Create new lobby" />
+        android:contentDescription="Stwórz nowy pokój" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -44,7 +44,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Safe drinking for everyone"
+                        android:text="Baw się bezpiecznie - Na zdrowie!"
                         android:textSize="14sp"
                         android:textColor="#E3F2FD"
                         android:layout_marginTop="4dp" />
@@ -88,7 +88,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Time until next safe drink"
+                        android:text="Czas do następnej kolejki"
                         android:textSize="14sp"
                         android:textColor="@android:color/darker_gray"
                         android:layout_marginBottom="20dp" />
@@ -106,7 +106,7 @@
                         android:id="@+id/button_drink_up"
                         android:layout_width="match_parent"
                         android:layout_height="56dp"
-                        android:text="🍻 Drink Up!"
+                        android:text="🍻 Na zdrowie!"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         app:backgroundTint="@color/primary"
@@ -133,7 +133,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Current Drink"
+                        android:text="Aktualny Drink"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
@@ -149,7 +149,7 @@
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="⏰ Timer Mode"
+                        android:text="⏰ Ustawienie zegara"
                         android:textSize="16sp"
                         android:textStyle="bold"
                         android:layout_marginBottom="8dp" />
@@ -165,7 +165,7 @@
                             android:id="@+id/radio_safe"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="🛡️ Ultra Safe (100% time)"
+                            android:text="🛡️ Najbezpieczniejszy (100%)"
                             android:textSize="14sp"
                             android:padding="8dp"
                             android:checked="true" />
@@ -174,7 +174,7 @@
                             android:id="@+id/radio_balanced"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="⚖️ Safe &amp; Fun (50% time)"
+                            android:text="⚖️ Zbalansowany (50%)"
                             android:textSize="14sp"
                             android:padding="8dp" />
 
@@ -182,7 +182,7 @@
                             android:id="@+id/radio_party"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:text="🎉 Party Mode (25% time)"
+                            android:text="🎉 Impreza! (25%)"
                             android:textSize="14sp"
                             android:padding="8dp" />
 
@@ -222,7 +222,7 @@
                             <TextView
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="👥 Party Members"
+                                android:text="👥 Członkowie pokoju"
                                 android:textSize="16sp"
                                 android:textStyle="bold" />
 
@@ -269,7 +269,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Add people to start the party!"
+                            android:text="Dodaj pierwszą osobę aby rozpocząć!"
                             android:textSize="16sp"
                             android:textColor="@android:color/darker_gray"
                             android:gravity="center" />

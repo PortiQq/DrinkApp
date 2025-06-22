@@ -63,7 +63,7 @@ class LobbyListActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         supportActionBar?.apply {
-            title = "DrinkApp - Lobbies"
+            title = "DrinkApp - Pokoje"
         }
     }
 
@@ -90,7 +90,6 @@ class LobbyListActivity : AppCompatActivity() {
     private fun observeViewModel() {
         // Observe lobbies LiveData - will automatically update when any lobby changes
         viewModel.lobbies.observe(this) { lobbies ->
-            android.util.Log.d("LobbyListActivity", "Received ${lobbies.size} lobbies update")
             updateUI(lobbies)
         }
     }
@@ -99,9 +98,9 @@ class LobbyListActivity : AppCompatActivity() {
         lobbyAdapter.submitList(lobbies.toList()) // Create a new list to trigger DiffUtil
 
         binding.textLobbyCount.text = when (lobbies.size) {
-            0 -> "No active lobbies"
-            1 -> "1 active lobby"
-            else -> "${lobbies.size} active lobbies"
+            0 -> "Brak aktywnych pokoi"
+            1 -> "1 aktywny pokój"
+            else -> "${lobbies.size} aktywnych pokoi"
         }
 
         binding.textEmptyState.visibility = if (lobbies.isEmpty()) {
@@ -121,11 +120,11 @@ class LobbyListActivity : AppCompatActivity() {
     private fun confirmDeleteLobby(lobby: Lobby) {
         AlertDialog.Builder(this)
             .setTitle("Delete Lobby")
-            .setMessage("Are you sure you want to delete \"${lobby.name}\"? This will remove all people and stop any active timers.")
-            .setPositiveButton("Delete") { _, _ ->
+            .setMessage("Czy na pewno chcesz usunąć \"${lobby.name}\"? Usunięte zostaną wszystkie osoby i zegar")
+            .setPositiveButton("Potwierdź") { _, _ ->
                 viewModel.removeLobby(lobby.id)
             }
-            .setNegativeButton("Cancel", null)
+            .setNegativeButton("Anuluj", null)
             .show()
     }
 }

@@ -29,7 +29,7 @@ class LobbyAdapter(
 
         fun bind(lobby: Lobby) {
             binding.textLobbyName.text = lobby.name
-            binding.textPeopleCount.text = "${lobby.people.size} people"
+            binding.textPeopleCount.text = "${lobby.people.size} osób"
             binding.textDrinkType.text = "${lobby.currentDrink.name} • ${lobby.safetyMode.emoji} ${lobby.safetyMode.displayName}"
 
 
@@ -39,8 +39,8 @@ class LobbyAdapter(
                 val minutes = (lobby.remainingTimeSeconds % 3600) / 60
                 val seconds = lobby.remainingTimeSeconds % 60
                 binding.textTimer.text = String.format("%02d:%02d:%02d", hours, minutes, seconds)
-                binding.textTimerStatus.text = "Next drink in"
-                binding.textStatus.text = "Active"
+                binding.textTimerStatus.text = "Następny drink"
+                binding.textStatus.text = "Aktywny"
                 binding.textStatus.setTextColor(
                     androidx.core.content.ContextCompat.getColor(
                         binding.root.context,
@@ -63,8 +63,8 @@ class LobbyAdapter(
                 binding.progressBarTimer.progress = progress
             } else {
                 binding.textTimer.text = "00:00:00"
-                binding.textTimerStatus.text = "Ready to drink"
-                binding.textStatus.text = "Inactive"
+                binding.textTimerStatus.text = "Gotowy"
+                binding.textStatus.text = "Nieaktywny"
                 binding.textStatus.setTextColor(
                     androidx.core.content.ContextCompat.getColor(
                         binding.root.context,
@@ -98,14 +98,6 @@ class LobbyDiffCallback : DiffUtil.ItemCallback<Lobby>() {
                 oldItem.currentDrink.name == newItem.currentDrink.name &&
                 oldItem.isTimerActive == newItem.isTimerActive &&
                 oldItem.remainingTimeSeconds == newItem.remainingTimeSeconds
-
-        if (!same) {
-            android.util.Log.d("LobbyAdapter", "Content changed for ${oldItem.name}: " +
-                    "people ${oldItem.people.size}->${newItem.people.size}, " +
-                    "drink ${oldItem.currentDrink.name}->${newItem.currentDrink.name}, " +
-                    "timer ${oldItem.isTimerActive}->${newItem.isTimerActive}")
-        }
-
         return same
     }
 }

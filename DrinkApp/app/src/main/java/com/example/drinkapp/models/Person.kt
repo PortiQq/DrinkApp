@@ -17,3 +17,10 @@ enum class Gender(val distributionCoefficient: Double) {
     MALE(0.68),
     FEMALE(0.55)
 }
+
+    fun Gender.displayName(): String {
+        return when (this) {
+            Gender.MALE -> "Mężczyzna"
+            Gender.FEMALE -> "Kobieta"
+    }
+}

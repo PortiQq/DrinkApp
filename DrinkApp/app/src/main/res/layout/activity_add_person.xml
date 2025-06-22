@@ -30,7 +30,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="👤 Add Person"
+                    android:text="👤 Dodaj osobę"
                     android:textSize="24sp"
                     android:textStyle="bold"
                     android:textColor="@android:color/white" />
@@ -38,7 +38,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Enter person details for safe calculations"
+                    android:text="Wprowadź dane osoby"
                     android:textSize="14sp"
                     android:textColor="#E3F2FD"
                     android:layout_marginTop="4dp" />
@@ -74,7 +74,7 @@
                         android:id="@+id/edit_text_name"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:hint="Full Name"
+                        android:hint="Imię"
                         android:inputType="textCapWords|textFilter"
                         android:imeOptions="actionNext"/>
 
@@ -84,7 +84,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Gender"
+                    android:text="Płeć"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:layout_marginBottom="8dp" />
@@ -101,7 +101,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="♂ Male"
+                        android:text="♂ Mężczyzna"
                         android:checked="true" />
 
                     <com.google.android.material.radiobutton.MaterialRadioButton
@@ -109,7 +109,7 @@
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
                         android:layout_weight="1"
-                        android:text="♀ Female" />
+                        android:text="♀ Kobieta" />
 
                 </RadioGroup>
 
@@ -132,7 +132,7 @@
                             android:id="@+id/edit_text_age"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Age"
+                            android:hint="Wiek"
                             android:inputType="number"
                             android:text="25" />
 
@@ -151,7 +151,7 @@
                             android:id="@+id/edit_text_weight"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Weight"
+                            android:hint="Waga"
                             android:inputType="numberDecimal"
                             android:text="70" />
 
@@ -169,7 +169,7 @@
                             android:id="@+id/edit_text_height"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:hint="Height"
+                            android:hint="Wzrost"
                             android:inputType="number"
                             android:text="175" />
 
@@ -191,7 +191,7 @@
                         android:layout_weight="1"
                         android:layout_marginEnd="8dp"
                         android:textSize="14sp"
-                        android:text="Cancel" />
+                        android:text="Anuluj" />
 
                     <com.google.android.material.button.MaterialButton
                         android:id="@+id/button_add_person"
@@ -199,7 +199,7 @@
                         android:layout_height="56dp"
                         android:layout_weight="1"
                         android:layout_marginStart="8dp"
-                        android:text="Add Person"
+                        android:text="Dodaj osobę"
                         app:backgroundTint="@color/primary" />
 
                 </LinearLayout>

@@ -25,7 +25,7 @@ class CreateLobbyActivity : AppCompatActivity() {
 
     private fun setupToolbar() {
         supportActionBar?.apply {
-            title = "Create New Lobby"
+            title = "Stwórz nowy pokój"
             setDisplayHomeAsUpEnabled(true)
         }
     }
@@ -53,12 +53,12 @@ class CreateLobbyActivity : AppCompatActivity() {
         val lobbyName = binding.editTextLobbyName.text.toString().trim()
 
         if (lobbyName.isEmpty()) {
-            binding.editTextLobbyName.error = "Lobby name is required"
+            binding.editTextLobbyName.error = "Nazwa pokoju jest wymagana"
             return false
         }
 
         if (lobbyName.length < 3) {
-            binding.editTextLobbyName.error = "Lobby name must be at least 3 characters"
+            binding.editTextLobbyName.error = "Nazwa musi składać się co najmniej z 3 znaków"
             return false
         }
 
@@ -85,7 +85,7 @@ class CreateLobbyActivity : AppCompatActivity() {
         }
 
         setResult(RESULT_OK, resultIntent)
-        Toast.makeText(this, "Lobby \"$lobbyName\" created!", Toast.LENGTH_SHORT).show()
+        Toast.makeText(this, "Pokój \"$lobbyName\" utworzony!", Toast.LENGTH_SHORT).show()
         finish()
     }
 

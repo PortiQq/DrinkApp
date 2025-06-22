@@ -54,15 +54,6 @@
                 android:textColor="@android:color/darker_gray"
                 android:layout_marginTop="2dp" />
 
-            <TextView
-                android:id="@+id/text_safe_time"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Safe interval: 90 min"
-                android:textSize="11sp"
-                android:textColor="@color/primary"
-                android:layout_marginTop="2dp" />
-
         </LinearLayout>
 
         <!-- Delete Button -->

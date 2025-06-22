@@ -42,11 +42,11 @@ class LobbyActivity : AppCompatActivity() {
                 val height = data.getIntExtra("person_height", 0)
                 val id = data.getStringExtra("person_id") ?: return@let
 
-                // Create person object
+                // Create person
                 val gender = try {
                     Gender.valueOf(genderString)
                 } catch (e: IllegalArgumentException) {
-                    Gender.MALE // Default fallback
+                    Gender.MALE // Default
                 }
 
                 val person = Person(
@@ -58,7 +58,7 @@ class LobbyActivity : AppCompatActivity() {
                     heightCm = height
                 )
 
-                // Add person to ViewModel
+                // Add to ViewModel
                 viewModel.addPerson(person)
             }
         }
@@ -148,7 +148,7 @@ class LobbyActivity : AppCompatActivity() {
         }
 
         personAdapter.submitList(lobby.people.toList())
-        binding.textPeopleCount.text = "${lobby.people.size} people"
+        binding.textPeopleCount.text = "${lobby.people.size} osób"
 
         // Show or hide the empty state based on people count
         if (lobby.people.isEmpty()) {
@@ -170,7 +170,7 @@ class LobbyActivity : AppCompatActivity() {
 
         // Update button state
         binding.buttonDrinkUp.isEnabled = lobby.people.isNotEmpty()
-        binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Drink Up ⚠️" else "🍻 Drink Up!"
+        binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Na Zdrowie ⚠️" else "🍻 Na Zdrowie!"
 
         // Update safety mode radio
         when (lobby.safetyMode) {
@@ -193,12 +193,12 @@ class LobbyActivity : AppCompatActivity() {
 
     private fun showSafetyWarning() {
         AlertDialog.Builder(this)
-            .setTitle("⚠️ Safety Warning")
-            .setMessage("It's not safe to drink yet! Timer still has ${formatTime(viewModel.getRemainingTime())} left.")
-            .setPositiveButton("Override") { _, _ ->
+            .setTitle("⚠️ Ostrzeżenie")
+            .setMessage("Nie upłynął jeszcze bezpieczny czas między kolejkami! Pozostało ${formatTime(viewModel.getRemainingTime())}!")
+            .setPositiveButton("Zignoruj") { _, _ ->
                 viewModel.overrideTimer()
             }
-            .setNegativeButton("Wait", null)
+            .setNegativeButton("Zaczekaj", null)
             .show()
     }
 
@@ -206,7 +206,7 @@ class LobbyActivity : AppCompatActivity() {
         val waitTime = AlcoholCalculator.calculateSafeWaitTimeMinutes(person, viewModel.getCurrentDrink())
         AlertDialog.Builder(this)
             .setTitle(person.name)
-            .setMessage("Safe wait time: ${waitTime} minutes\nWeight: ${person.weightKg}kg\nGender: ${person.gender}")
+            .setMessage("Bezpieczny czas: ${waitTime} minut\nWzrost: ${person.heightCm}cm\nWaga: ${person.weightKg}kg\nPłeć: ${person.gender}")
             .setPositiveButton("OK", null)
             .show()
     }
