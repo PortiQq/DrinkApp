@@ -30,7 +30,8 @@ class LobbyAdapter(
         fun bind(lobby: Lobby) {
             binding.textLobbyName.text = lobby.name
             binding.textPeopleCount.text = "${lobby.people.size} people"
-            binding.textDrinkType.text = lobby.currentDrink.name
+            binding.textDrinkType.text = "${lobby.currentDrink.name} • ${lobby.safetyMode.emoji} ${lobby.safetyMode.displayName}"
+
 
             // Show timer status
             if (lobby.isTimerActive) {

@@ -7,6 +7,7 @@ import com.example.drinkapp.managers.LobbyManager
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.SafetyMode
 import com.example.drinkapp.models.TimerState
 
 class LobbyViewModel : ViewModel() {
@@ -95,9 +96,11 @@ class LobbyViewModel : ViewModel() {
         return lobbyId?.let { LobbyManager.getLobby(it)?.currentDrink } ?: Drink.COMMON_DRINKS[0]
     }
 
-    fun saveLobbyState() {
-        // This method can be used to persist lobby state when activity is destroyed
-        // For now, the state is maintained in LobbyManager
+    fun updateSafetyMode(safetyMode: SafetyMode) {
+        lobbyId?.let { id ->
+            LobbyManager.updateLobbySafetyMode(id, safetyMode)
+            _lobby.value = LobbyManager.getLobby(id)
+        }
     }
 
     override fun onCleared() {

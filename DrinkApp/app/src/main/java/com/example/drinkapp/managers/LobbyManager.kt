@@ -6,6 +6,7 @@ import androidx.lifecycle.MutableLiveData
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Person
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.SafetyMode
 import com.example.drinkapp.models.TimerState
 
 object LobbyManager {
@@ -131,13 +132,10 @@ object LobbyManager {
         return lobbies.values.toList()
     }
 
-    fun clearAllLobbies() {
-        timers.values.forEach { it.cancel() }
-        timers.clear()
-
-        timerCallbacks.clear()
-
-        lobbies.clear()
-        notifyLobbiesChanged()
+    fun updateLobbySafetyMode(lobbyId: String, safetyMode: SafetyMode) {
+        lobbies[lobbyId]?.let { lobby ->
+            lobby.safetyMode = safetyMode
+            notifyLobbiesChanged()
+        }
     }
 }

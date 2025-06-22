@@ -7,6 +7,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.example.drinkapp.databinding.ActivityCreateLobbyBinding
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.SafetyMode
 
 class CreateLobbyActivity : AppCompatActivity() {
 
@@ -68,10 +69,19 @@ class CreateLobbyActivity : AppCompatActivity() {
         val lobbyName = binding.editTextLobbyName.text.toString().trim()
         val selectedDrinkIndex = binding.spinnerInitialDrink.selectedItemPosition
 
+        // Get selected safety mode
+        val selectedSafetyMode = when (binding.radioGroupSafetyMode.checkedRadioButtonId) {
+            binding.radioUltraSafe.id -> SafetyMode.SAFE
+            binding.radioBalanced.id -> SafetyMode.BALANCED
+            binding.radioParty.id -> SafetyMode.PARTY
+            else -> SafetyMode.SAFE
+        }
+
         // Create result intent with lobby data
         val resultIntent = Intent().apply {
             putExtra("lobby_name", lobbyName)
             putExtra("selected_drink", selectedDrinkIndex)
+            putExtra("safety_mode", selectedSafetyMode.name)
         }
 
         setResult(RESULT_OK, resultIntent)

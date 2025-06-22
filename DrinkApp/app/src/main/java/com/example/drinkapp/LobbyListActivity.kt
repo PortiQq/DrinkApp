@@ -11,6 +11,7 @@ import com.example.drinkapp.adapters.LobbyAdapter
 import com.example.drinkapp.databinding.ActivityLobbyListBinding
 import com.example.drinkapp.models.Lobby
 import com.example.drinkapp.models.Drink
+import com.example.drinkapp.models.SafetyMode
 import com.example.drinkapp.viewmodel.LobbyListViewModel
 
 class LobbyListActivity : AppCompatActivity() {
@@ -26,10 +27,17 @@ class LobbyListActivity : AppCompatActivity() {
                 val lobbyName = data.getStringExtra("lobby_name") ?: return@let
                 val selectedDrinkIndex = data.getIntExtra("selected_drink", 0)
                 val selectedDrink = Drink.COMMON_DRINKS[selectedDrinkIndex]
+                val safetyModeName = data.getStringExtra("safety_mode") ?: SafetyMode.SAFE.name
+                val safetyMode = try {
+                    SafetyMode.valueOf(safetyModeName)
+                } catch (e: IllegalArgumentException) {
+                    SafetyMode.SAFE
+                }
 
                 val newLobby = Lobby(
                     name = lobbyName,
-                    currentDrink = selectedDrink
+                    currentDrink = selectedDrink,
+                    safetyMode = safetyMode
                 )
 
                 viewModel.addLobby(newLobby)

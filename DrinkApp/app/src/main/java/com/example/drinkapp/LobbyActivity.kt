@@ -19,6 +19,7 @@ import com.example.drinkapp.utils.AlcoholCalculator
 import com.example.drinkapp.viewmodel.LobbyViewModel
 import com.example.drinkapp.adapters.PersonAdapter
 import com.example.drinkapp.databinding.ActivityLobbyBinding
+import com.example.drinkapp.models.SafetyMode
 
 
 class LobbyActivity : AppCompatActivity() {
@@ -112,6 +113,16 @@ class LobbyActivity : AppCompatActivity() {
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
+        // Safety mode selection
+        binding.radioGroupSafetyMode.setOnCheckedChangeListener { _, checkedId ->
+            val safetyMode = when (checkedId) {
+                binding.radioSafe.id -> SafetyMode.SAFE
+                binding.radioBalanced.id -> SafetyMode.BALANCED
+                binding.radioParty.id -> SafetyMode.PARTY
+                else -> SafetyMode.SAFE
+            }
+            viewModel.updateSafetyMode(safetyMode)
+        }
     }
 
     private fun observeViewModel() {
@@ -131,7 +142,6 @@ class LobbyActivity : AppCompatActivity() {
     private fun updateUI(lobby: Lobby?) {
         if (lobby == null) return
 
-        // Update toolbar with lobby name
         supportActionBar?.apply {
             title = lobby.name
             setDisplayHomeAsUpEnabled(true)
@@ -139,6 +149,13 @@ class LobbyActivity : AppCompatActivity() {
 
         personAdapter.submitList(lobby.people.toList())
         binding.textPeopleCount.text = "${lobby.people.size} people"
+
+        // Show or hide the empty state based on people count
+        if (lobby.people.isEmpty()) {
+            binding.emptyState.visibility = View.VISIBLE
+        } else {
+            binding.emptyState.visibility = View.GONE
+        }
 
         // Update drink spinner
         val drinkNames = Drink.COMMON_DRINKS.map { it.name }
@@ -154,18 +171,23 @@ class LobbyActivity : AppCompatActivity() {
         // Update button state
         binding.buttonDrinkUp.isEnabled = lobby.people.isNotEmpty()
         binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Drink Up ⚠️" else "🍻 Drink Up!"
+
+        // Update safety mode radio
+        when (lobby.safetyMode) {
+            SafetyMode.SAFE -> binding.radioSafe.isChecked = true
+            SafetyMode.BALANCED -> binding.radioBalanced.isChecked = true
+            SafetyMode.PARTY -> binding.radioParty.isChecked = true
+        }
     }
 
     private fun updateTimer(timerState: TimerState) {
         binding.textTimer.text = formatTime(timerState.remainingSeconds)
         binding.progressBarGlass.progress = timerState.progressPercentage
 
-        // Update glass animation
         updateGlassAnimation(timerState.progressPercentage)
     }
 
     private fun updateGlassAnimation(progressPercentage: Int) {
-        // Animate the custom wine glass view
         binding.wineGlassView.setFillPercentage(progressPercentage.toFloat())
     }
 
@@ -205,14 +227,6 @@ class LobbyActivity : AppCompatActivity() {
         super.onResume()
         if (::viewModel.isInitialized) {
             viewModel.onResume()  // Re-establish timer connection
-        }
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-        // Save lobby state when leaving
-        if (::viewModel.isInitialized) {
-            viewModel.saveLobbyState()
         }
     }
 }

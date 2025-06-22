@@ -7,6 +7,7 @@ data class Lobby(
     val name: String,
     val people: MutableList<Person> = mutableListOf(),
     var currentDrink: Drink,
+    var safetyMode: SafetyMode = SafetyMode.SAFE,
     var isTimerActive: Boolean = false,
     var remainingTimeSeconds: Int = 0
 ) {
@@ -21,8 +22,11 @@ data class Lobby(
     fun getSafestWaitTime(): Int {
         if (people.isEmpty()) return 60
 
-        return people.maxOf { person ->
+        val baseTime = people.maxOf { person ->
             AlcoholCalculator.calculateSafeWaitTimeMinutes(person, currentDrink)
         }
+
+        return (baseTime * safetyMode.multiplier).toInt().coerceAtLeast(1)
+
     }
 }
