@@ -96,6 +96,14 @@ class LobbyDiffCallback : DiffUtil.ItemCallback<Lobby>() {
     }
 
     override fun areContentsTheSame(oldItem: Lobby, newItem: Lobby): Boolean {
-        return oldItem == newItem
+        // Pobierz aktualne dane z LobbyManager dla porównania
+        val freshOld = LobbyManager.getLobby(oldItem.id) ?: oldItem
+        val freshNew = LobbyManager.getLobby(newItem.id) ?: newItem
+
+        return freshOld.name == freshNew.name &&
+                freshOld.people.size == freshNew.people.size &&
+                freshOld.currentDrink == freshNew.currentDrink &&
+                freshOld.isTimerActive == freshNew.isTimerActive &&
+                freshOld.remainingTimeSeconds == freshNew.remainingTimeSeconds
     }
 }

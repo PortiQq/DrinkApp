@@ -21,6 +21,14 @@ class LobbyListViewModel : ViewModel() {
         _lobbies.value = currentLobbies
     }
 
+    fun forceRefresh() {
+        val currentLobbies = LobbyManager.getAllLobbies()
+        val refreshedLobbies = currentLobbies.map { lobby ->
+            LobbyManager.getLobby(lobby.id) ?: lobby
+        }
+        _lobbies.value = refreshedLobbies
+    }
+
     fun addLobby(lobby: Lobby) {
 
         LobbyManager.addLobby(lobby)

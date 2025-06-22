@@ -56,7 +56,8 @@ class LobbyListActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
-        viewModel.onResume() // Refresh
+        viewModel.forceRefresh() // Zamiast viewModel.onResume(
+        //viewModel.onResume() // Refresh
     }
 
     private fun setupViewModel() {
