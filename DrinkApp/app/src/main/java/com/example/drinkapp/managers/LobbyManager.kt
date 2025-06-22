@@ -58,6 +58,17 @@ object LobbyManager {
     fun removePersonFromLobby(lobbyId: String, personId: String) {
         lobbies[lobbyId]?.let { lobby ->
             lobby.removePerson(personId)
+
+            // timer reset if no people in lobby
+            if (lobby.people.isEmpty()) {
+                timers[lobbyId]?.cancel()
+                timers.remove(lobbyId)
+                lobby.isTimerActive = false
+                lobby.remainingTimeSeconds = 0
+
+                // timer callback notify
+                timerCallbacks[lobbyId]?.invoke(TimerState(0, 0))
+            }
             notifyLobbiesChanged()
         }
     }

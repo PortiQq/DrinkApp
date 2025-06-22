@@ -20,7 +20,8 @@ data class Drink(
             Drink("Wine 150ml", 12.0, 150, DrinkCategory.WINE),
             Drink("Vodka 40ml", 40.0, 40, DrinkCategory.SPIRIT),
             Drink("Whiskey 40ml", 40.0, 40, DrinkCategory.SPIRIT),
-            Drink("Cocktail 200ml", 15.0, 200, DrinkCategory.COCKTAIL)
+            Drink("Cocktail 200ml", 15.0, 200, DrinkCategory.COCKTAIL),
+            Drink("Water 200ml", 0.1, 200, DrinkCategory.COCKTAIL)
         )
     }
 }

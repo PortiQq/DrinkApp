@@ -78,31 +78,34 @@ class WineGlassView @JvmOverloads constructor(
         val stemBottom = height * 0.85f
         val baseY = height * 0.9f
 
-        // Draw wine fill (behind glass)
+        val glassTopWidth = width * 0.3f
+        val glassBottomWidth = width * 0.25f
+
+        // Fill
         if (fillPercentage > 0) {
             val fillHeight = (glassBottom - glassTop) * (fillPercentage / 100f)
             val fillTop = glassBottom - fillHeight
 
-            val wineLeft = centerX - (width * 0.25f)
-            val wineRight = centerX + (width * 0.25f)
+            val fillTopRatio = (fillTop - glassTop) / (glassBottom - glassTop)
+            val wineTopWidth = glassBottomWidth + (glassTopWidth - glassBottomWidth) * (1 - fillTopRatio)
 
             val winePath = Path().apply {
-                moveTo(wineLeft, glassBottom)
-                lineTo(wineRight, glassBottom)
-                lineTo(wineRight - (fillHeight * 0.1f), fillTop)
-                lineTo(wineLeft + (fillHeight * 0.1f), fillTop)
+
+                moveTo(centerX - glassBottomWidth, glassBottom)  //bottom left
+                lineTo(centerX + glassBottomWidth, glassBottom) // Bottom right
+                lineTo(centerX + wineTopWidth, fillTop)// Top right
+                lineTo(centerX - wineTopWidth, fillTop) // Top left
                 close()
             }
 
             canvas.drawPath(winePath, winePaint)
         }
 
-        // Draw glass bowl
         val glassPath = Path().apply {
-            moveTo(centerX - width * 0.3f, glassTop)
-            lineTo(centerX + width * 0.3f, glassTop)
-            lineTo(centerX + width * 0.25f, glassBottom)
-            lineTo(centerX - width * 0.25f, glassBottom)
+            moveTo(centerX - glassTopWidth, glassTop)  // Top left
+            lineTo(centerX + glassTopWidth, glassTop)  // Top right
+            lineTo(centerX + glassBottomWidth, glassBottom)  // Bottom right
+            lineTo(centerX - glassBottomWidth, glassBottom)  // Bottom left
             close()
         }
         canvas.drawPath(glassPath, glassPaint)
@@ -111,22 +114,22 @@ class WineGlassView @JvmOverloads constructor(
         canvas.drawLine(centerX, stemTop, centerX, stemBottom, stemPaint)
 
         // Draw base
-        val baseWidth = width * 0.4f
-        canvas.drawLine(centerX - baseWidth, baseY, centerX + baseWidth, baseY, basePaint)
+        val baseLeft = centerX - width * 0.4f
+        val baseRight = centerX + width * 0.4f
+        canvas.drawLine(baseLeft, baseY, baseRight, baseY, basePaint)
 
-        // Draw highlight on glass
-        val highlightPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
-            color = Color.WHITE
-            alpha = 80
-            style = Paint.Style.STROKE
-            strokeWidth = 3f
+        // Draw small circles at connection points for better visual
+        val connectionPaint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+            color = ContextCompat.getColor(context, R.color.glass_outline)
+            style = Paint.Style.FILL
         }
 
-        canvas.drawLine(
-            centerX - width * 0.22f, glassTop + 20f,
-            centerX - width * 0.18f, glassTop + 60f,
-            highlightPaint
-        )
+        // Connection between glass and stem
+        canvas.drawCircle(centerX, glassBottom, 4f, connectionPaint)
+
+        // Connection between stem and base
+        canvas.drawCircle(centerX, stemBottom, 4f, connectionPaint)
+
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {

@@ -74,13 +74,8 @@ class LobbyViewModel : ViewModel() {
                 _showWarning.value = true
                 return
             }
-
             LobbyManager.startLobbyTimer(id)
             _lobby.value = LobbyManager.getLobby(id)
-            if (lobby?.isTimerActive == true && lobby.remainingTimeSeconds > 0) {
-                _showWarning.value = true
-                return
-            }
         }
     }
 
@@ -111,7 +106,7 @@ class LobbyViewModel : ViewModel() {
         lobbyId?.let { LobbyManager.removeTimerStateCallback(it) }
     }
 
-     fun onResume() {
+    fun onResume() {
         lobbyId?.let { id ->
             val lobby = LobbyManager.getLobby(id)
             lobby?.let {

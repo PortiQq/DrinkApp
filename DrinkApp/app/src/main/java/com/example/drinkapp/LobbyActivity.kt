@@ -153,7 +153,7 @@ class LobbyActivity : AppCompatActivity() {
 
         // Update button state
         binding.buttonDrinkUp.isEnabled = lobby.people.isNotEmpty()
-        binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Drink Up ⚠" else "🍻 Drink Up!"
+        binding.buttonDrinkUp.text = if (lobby.isTimerActive) "⚠️ Drink Up ⚠️" else "🍻 Drink Up!"
     }
 
     private fun updateTimer(timerState: TimerState) {
@@ -190,9 +190,10 @@ class LobbyActivity : AppCompatActivity() {
     }
 
     private fun formatTime(seconds: Int): String {
-        val minutes = seconds / 60
+        val hours = seconds / 3600
+        val minutes = (seconds % 3600) / 60
         val remainingSeconds = seconds % 60
-        return String.format("%02d:%02d", minutes, remainingSeconds)
+        return String.format("%02d:%02d:%02d", hours, minutes, remainingSeconds)
     }
 
     override fun onSupportNavigateUp(): Boolean {
