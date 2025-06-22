@@ -27,6 +27,12 @@ class LobbyViewModel : ViewModel() {
     }
 
     fun initializeLobby(lobbyId: String) {
+
+        if (this.lobbyId != null) {
+            onResume()
+            return
+        }
+
         this.lobbyId = lobbyId
         val lobby = LobbyManager.getLobby(lobbyId)
         _lobby.value = lobby
@@ -99,6 +105,13 @@ class LobbyViewModel : ViewModel() {
     fun updateSafetyMode(safetyMode: SafetyMode) {
         lobbyId?.let { id ->
             LobbyManager.updateLobbySafetyMode(id, safetyMode)
+            _lobby.value = LobbyManager.getLobby(id)
+        }
+    }
+
+    fun updateCustomDrink(drink: Drink) {
+        lobbyId?.let { id ->
+            LobbyManager.updateLobbyCustomDrink(id, drink)
             _lobby.value = LobbyManager.getLobby(id)
         }
     }

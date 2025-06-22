@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="24dp">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wprowadź parametry własnego drinka"
+        android:textSize="14sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginBottom="16dp" />
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="16dp"
+        app:boxBackgroundMode="outline"
+        app:suffixText="ml">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_volume"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Objętość"
+            android:inputType="number"
+            android:text="200" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:boxBackgroundMode="outline"
+        app:suffixText="%">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/edit_text_alcohol_percentage"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Zawartość alkoholu"
+            android:inputType="numberDecimal"
+            android:text="5.0" />
+
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Przykłady:\n• Piwo: 500ml 5%\n• Wino: 150ml 12%\n• Wódka: 40ml 40%"
+        android:textSize="12sp"
+        android:textColor="@android:color/darker_gray"
+        android:layout_marginTop="8dp" />
+
+</LinearLayout>

@@ -19,6 +19,7 @@ import com.example.drinkapp.utils.AlcoholCalculator
 import com.example.drinkapp.viewmodel.LobbyViewModel
 import com.example.drinkapp.adapters.PersonAdapter
 import com.example.drinkapp.databinding.ActivityLobbyBinding
+import com.example.drinkapp.dialogs.CustomDrinkDialog
 import com.example.drinkapp.models.SafetyMode
 
 
@@ -69,7 +70,6 @@ class LobbyActivity : AppCompatActivity() {
         binding = ActivityLobbyBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // Get lobby ID from intent
         lobbyId = intent.getStringExtra("lobby_id")
         if (lobbyId == null) {
             finish()
@@ -108,12 +108,31 @@ class LobbyActivity : AppCompatActivity() {
 
         binding.spinnerDrink.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
             override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                val selectedDrink = Drink.COMMON_DRINKS[position]
-                viewModel.updateCurrentDrink(selectedDrink)
+                val lobby = viewModel.lobby.value ?: return
+
+                val drinkList = mutableListOf<Drink>()
+                drinkList.addAll(Drink.COMMON_DRINKS)
+                if (lobby.customDrink != null) {
+                    drinkList[drinkList.size - 1] = lobby.customDrink!!
+                }
+
+                val selectedDrink = drinkList[position]
+
+                when {
+                    selectedDrink.name == "Własny..." -> {
+                        val dialog = CustomDrinkDialog { customDrink ->
+                            viewModel.updateCustomDrink(customDrink)
+                        }
+                        dialog.show(supportFragmentManager, "customDrink")
+                    }
+                    else -> {
+                        viewModel.updateCurrentDrink(selectedDrink)
+                    }
+                }
             }
             override fun onNothingSelected(parent: AdapterView<*>?) {}
         }
-        // Safety mode selection
+
         binding.radioGroupSafetyMode.setOnCheckedChangeListener { _, checkedId ->
             val safetyMode = when (checkedId) {
                 binding.radioSafe.id -> SafetyMode.SAFE
@@ -158,15 +177,7 @@ class LobbyActivity : AppCompatActivity() {
         }
 
         // Update drink spinner
-        val drinkNames = Drink.COMMON_DRINKS.map { it.name }
-        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, drinkNames)
-        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
-        binding.spinnerDrink.adapter = spinnerAdapter
-
-        val selectedIndex = Drink.COMMON_DRINKS.indexOf(viewModel.getCurrentDrink())
-        if (selectedIndex >= 0) {
-            binding.spinnerDrink.setSelection(selectedIndex)
-        }
+        updateDrinkSpinner()
 
         // Update button state
         binding.buttonDrinkUp.isEnabled = lobby.people.isNotEmpty()
@@ -177,6 +188,30 @@ class LobbyActivity : AppCompatActivity() {
             SafetyMode.SAFE -> binding.radioSafe.isChecked = true
             SafetyMode.BALANCED -> binding.radioBalanced.isChecked = true
             SafetyMode.PARTY -> binding.radioParty.isChecked = true
+        }
+    }
+
+    private fun updateDrinkSpinner() {
+        val lobby = viewModel.lobby.value ?: return
+
+        val drinkList = mutableListOf<Drink>()
+        drinkList.addAll(Drink.COMMON_DRINKS)
+
+        // Własny drink to spinner list
+        if (lobby.customDrink != null) {
+            drinkList[drinkList.size - 1] = lobby.customDrink!!
+        }
+
+        val drinkNames = drinkList.map { it.name }
+
+        val spinnerAdapter = ArrayAdapter(this, android.R.layout.simple_spinner_item, drinkNames)
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item)
+        binding.spinnerDrink.adapter = spinnerAdapter
+
+
+        val selectedIndex = drinkList.indexOf(lobby.currentDrink)
+        if (selectedIndex >= 0) {
+            binding.spinnerDrink.setSelection(selectedIndex)
         }
     }
 
@@ -203,6 +238,14 @@ class LobbyActivity : AppCompatActivity() {
     }
 
     private fun showPersonDetails(person: Person) {
+
+        val lobby = viewModel.lobby.value ?: return
+        val drinkToUse = if (lobby.currentDrink.name.startsWith("Własny")) {
+            lobby.customDrink ?: lobby.currentDrink
+        } else {
+            lobby.currentDrink
+        }
+
         val waitTime = AlcoholCalculator.calculateSafeWaitTimeMinutes(person, viewModel.getCurrentDrink())
         AlertDialog.Builder(this)
             .setTitle(person.name)

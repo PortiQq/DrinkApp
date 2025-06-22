@@ -98,6 +98,7 @@ class LobbyDiffCallback : DiffUtil.ItemCallback<Lobby>() {
                 oldItem.currentDrink.name == newItem.currentDrink.name &&
                 oldItem.isTimerActive == newItem.isTimerActive &&
                 oldItem.remainingTimeSeconds == newItem.remainingTimeSeconds
+
         return same
     }
 }

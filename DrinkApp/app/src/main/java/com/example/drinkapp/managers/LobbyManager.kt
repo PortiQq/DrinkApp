@@ -26,7 +26,12 @@ object LobbyManager {
         // copy of lobbies for LiveData detecting changes
         val lobbiesCopy = lobbies.values.map { lobby ->
             lobby.copy(
-                people = lobby.people.toMutableList()
+                id = lobby.id,
+                name = lobby.name,
+                people = lobby.people.toMutableList(),
+                currentDrink = lobby.currentDrink,
+                isTimerActive = lobby.isTimerActive,
+                remainingTimeSeconds = lobby.remainingTimeSeconds
             )
         }
         _lobbiesLiveData.postValue(lobbiesCopy)
@@ -77,6 +82,14 @@ object LobbyManager {
     fun updateLobbyDrink(lobbyId: String, drink: Drink) {
         lobbies[lobbyId]?.let { lobby ->
             lobby.currentDrink = drink
+            notifyLobbiesChanged()
+        }
+    }
+
+    fun updateLobbyCustomDrink(lobbyId: String, customDrink: Drink) {
+        lobbies[lobbyId]?.let { lobby ->
+            lobby.customDrink = customDrink
+            lobby.currentDrink = customDrink
             notifyLobbiesChanged()
         }
     }

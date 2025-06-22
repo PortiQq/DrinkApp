@@ -18,10 +18,11 @@ data class Drink(
         val COMMON_DRINKS = listOf(
             Drink("Piwo 500ml", 5.0, 500, DrinkCategory.BEER),
             Drink("Wino 150ml", 12.0, 150, DrinkCategory.WINE),
-            Drink("Wodka 40ml", 40.0, 40, DrinkCategory.SPIRIT),
+            Drink("Wódka 40ml", 40.0, 40, DrinkCategory.SPIRIT),
             Drink("Whiskey 40ml", 40.0, 40, DrinkCategory.SPIRIT),
             Drink("Koktail 200ml", 15.0, 200, DrinkCategory.COCKTAIL),
-            Drink("Woda 200ml", 0.0, 200, DrinkCategory.OTHER)
+            Drink("Woda 200ml", 0.0, 200, DrinkCategory.OTHER),
+            Drink("Własny...", 0.0, 0, DrinkCategory.OTHER)
         )
     }
 }

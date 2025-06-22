@@ -7,6 +7,7 @@ data class Lobby(
     val name: String,
     val people: MutableList<Person> = mutableListOf(),
     var currentDrink: Drink,
+    var customDrink: Drink? = null,
     var safetyMode: SafetyMode = SafetyMode.SAFE,
     var isTimerActive: Boolean = false,
     var remainingTimeSeconds: Int = 0
